@@ -54,9 +54,6 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public Quiz getAllQuestionsByQuiz(Long quizId) {
         Quiz quiz = quizRepository.findByQuizId(quizId);
-        if (quiz == null) {
-            throw new NotFoundException("not found");
-        }
         return quiz;
     }
 }
