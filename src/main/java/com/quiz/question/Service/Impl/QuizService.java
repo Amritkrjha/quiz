@@ -16,5 +16,5 @@ public interface QuizService {
 
     public Quiz getQuizById(Long quizId);
 
-    public List<Question> getAllQuestionsByQuiz(Long quizId);
+    public Quiz getAllQuestionsByQuiz(Long quizId);
 }

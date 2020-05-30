@@ -23,7 +23,7 @@ public class QuestionController {
     @Autowired
     QuestionServiceImpl questionService;
 
-    @RequestMapping(method = RequestMethod.POST,value = "/api"+"/question")
+    @RequestMapping(method = RequestMethod.POST,value = "/api"+"/questions")
     public ResponseEntity<?> addQuestion(@RequestBody QuestionInputDTO questionInputDTO)
             throws InvalidFormatException, IOException {
 
@@ -32,8 +32,8 @@ public class QuestionController {
         return new ResponseEntity<>(questionOutputDTO, HttpStatus.CREATED);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/api"+"/question"+"/{questionId}")
-    public ResponseEntity<?> getBookById(@Valid @NotNull @PathVariable("questionId") Long questionId) {
+    @RequestMapping(method = RequestMethod.GET, value = "/api"+"/questions"+"/{questionId}")
+    public ResponseEntity<?> getQuestionById(@Valid @NotNull @PathVariable("questionId") Long questionId) {
        if(questionId==null){
            FailureResponseDTO failureResponseDTO= new FailureResponseDTO();
            failureResponseDTO.setStatus("failure");

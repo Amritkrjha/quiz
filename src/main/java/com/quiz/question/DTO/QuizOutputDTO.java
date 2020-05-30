@@ -13,6 +13,15 @@ public class QuizOutputDTO {
     private String description;
 
     private List<Question> questions;
+    public QuizOutputDTO(){
+        
+    }
+
+    public QuizOutputDTO(Long quizId, String name, String description) {
+        this.quizId = quizId;
+        this.name = name;
+        this.description = description;
+    }
 
     public QuizOutputDTO(Long quizId, String name, String description, List<Question> questions) {
         this.quizId = quizId;

@@ -20,7 +20,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class QuizServiceImpl implements QuizService {
-    
+
     @Autowired
     QuizRepository quizRepository;
 
@@ -30,14 +30,14 @@ public class QuizServiceImpl implements QuizService {
         Optional<Quiz> quizOptional = quizRepository.findByName(quizInputDTO.getName());
 
         if (!quizOptional.isPresent()) {
-            quiz = new Quiz(quizInputDTO.getName(),quizInputDTO.getDescription());
+            quiz = new Quiz(quizInputDTO.getName(), quizInputDTO.getDescription());
         } else {
             throw new BadRequestException("already present");
-            
+
         }
         quizRepository.save(quiz);
-      //  quiz = quizRepository.findByName(quizInputDTO.getName()).get();
-        QuizOutputDTO quizOutputDTO = new QuizOutputDTO(quiz.getQuizId(),quiz.getName(),quiz.getDescription(),quiz.getQuestions());
+        //  quiz = quizRepository.findByName(quizInputDTO.getName()).get();
+        QuizOutputDTO quizOutputDTO = new QuizOutputDTO(quiz.getQuizId(), quiz.getName(), quiz.getDescription(), quiz.getQuestions());
         return quizOutputDTO;
     }
 
@@ -50,18 +50,14 @@ public class QuizServiceImpl implements QuizService {
         }
         return quiz;
     }
+
     @Override
-    public List<Question> getAllQuestionsByQuiz(Long quizId) {
+    public Quiz getAllQuestionsByQuiz(Long quizId) {
         Quiz quiz = quizRepository.findByQuizId(quizId);
-        if(quiz==null){
+        if (quiz == null) {
             throw new NotFoundException("not found");
         }
-        List<Question> questionList= quizRepository.getOne(quizId).getQuestions();
-
-        if (questionList != null && !questionList.isEmpty()) {
-            return questionList;
-        } else
-            throw new NotFoundException("Questions not found");
+        return quiz;
     }
-    
 }
+        

@@ -40,6 +40,12 @@ public class Quiz implements Serializable {
         this.description = description;
     }
 
+    public Quiz(Long quizId, String name, String description) {
+        this.quizId = quizId;
+        this.name = name;
+        this.description = description;
+    }
+
     public Quiz(Long quizId, String name, String description, List<Question> questions) {
         this.quizId = quizId;
         this.name = name;

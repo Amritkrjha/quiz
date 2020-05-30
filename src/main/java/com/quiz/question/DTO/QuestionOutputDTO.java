@@ -1,9 +1,7 @@
 package com.quiz.question.DTO;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.quiz.question.Entity.Quiz;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class QuestionOutputDTO {
     
     private Long questionId;
@@ -14,20 +12,20 @@ public class QuestionOutputDTO {
 
     private Integer correctOptions;
 
-    private Long quizId;
+    private Long quiz;
 
     private Integer points;
     
     public QuestionOutputDTO(){
+        
     }
-    
 
     public QuestionOutputDTO(Long questionId, String name, String options, Integer correctOptions, Long quizId, Integer points) {
         this.questionId = questionId;
         this.name = name;
         this.options = options;
         this.correctOptions = correctOptions;
-        this.quizId = quizId;
+        this.quiz = quiz;
         this.points = points;
     }
 
@@ -63,12 +61,12 @@ public class QuestionOutputDTO {
         this.correctOptions = correctOptions;
     }
 
-    public Long getQuizId() {
-        return quizId;
+    public Long getQuiz() {
+        return quiz;
     }
 
-    public void setQuizId(Long quizId) {
-        this.quizId = quizId;
+    public void setQuiz(Long quiz) {
+        this.quiz = quiz;
     }
 
     public Integer getPoints() {

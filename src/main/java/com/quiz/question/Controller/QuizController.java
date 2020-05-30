@@ -1,6 +1,7 @@
 package com.quiz.question.Controller;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.quiz.question.DTO.FailureResponseDTO;
 import com.quiz.question.DTO.QuestionOutputDTO;
 import com.quiz.question.DTO.QuizInputDTO;
 import com.quiz.question.DTO.QuizOutputDTO;
@@ -30,8 +31,8 @@ public class QuizController {
     @Autowired
     QuestionServiceImpl questionService;
 
-    @RequestMapping(method = RequestMethod.POST,value = "/api"+"/quiz")
-    public ResponseEntity<?> addBook(@RequestBody QuizInputDTO quizInputDTO)
+    @RequestMapping(method = RequestMethod.POST,value = "/api"+"/quiz/")
+    public ResponseEntity<?> addQuiz(@RequestBody QuizInputDTO quizInputDTO)
             throws InvalidFormatException, IOException {
 
         QuizOutputDTO quizOutputDTO = quizService.createQuiz(quizInputDTO);
@@ -39,22 +40,68 @@ public class QuizController {
         return new ResponseEntity<>(quizOutputDTO, HttpStatus.CREATED);
     }
     @RequestMapping(method = RequestMethod.GET, value = "/api"+"/quiz"+"/{quizId}")
-    public ResponseEntity<Quiz> getBookById(@Valid @NotNull @PathVariable("quizId") Long quizId) {
+    public ResponseEntity<?> getQuizById(@Valid @NotNull @PathVariable("quizId") Long quizId) {
 
+        if(quizId==null){
+            FailureResponseDTO failureResponseDTO= new FailureResponseDTO();
+            failureResponseDTO.setStatus("failure");
+            failureResponseDTO.setReason("Question id is null");
+            return new ResponseEntity<>(failureResponseDTO, HttpStatus.NOT_FOUND);
+
+        }
+        try{
+
+            Long.parseLong(String.valueOf(quizId));
+        }
+        catch (Exception e){
+            FailureResponseDTO failureResponseDTO = new FailureResponseDTO();
+            failureResponseDTO.setStatus("failure");
+            failureResponseDTO.setReason(e.getCause().getLocalizedMessage());
+        }
         Quiz quiz = quizService.getQuizById(quizId);
 
-        return new ResponseEntity<>(quiz, HttpStatus.OK);
+        if(quiz==null){
+            QuizOutputDTO quizOutputDTO = new QuizOutputDTO();
+            return new ResponseEntity<>(quizOutputDTO, HttpStatus.NOT_FOUND);
+
+        }
+        QuizOutputDTO quizOutputDTO = new QuizOutputDTO(quiz.getQuizId(),quiz.getName(),
+                quiz.getDescription());
+
+        return new ResponseEntity<>(quizOutputDTO, HttpStatus.OK);
+
 
     }
-    @RequestMapping(method = RequestMethod.GET, value = "/api"+"/question/quiz"+"/{quizId}")
-    public ResponseEntity<List<QuestionOutputDTO>> getQuestions(@Valid @NotNull @PathVariable Long quizId){
-        List<Question> quizList=quizService.getAllQuestionsByQuiz(quizId);
-        List<QuestionOutputDTO> questionOutputDTOList=new ArrayList<>();
-        for(Question question: quizList){
-            QuestionOutputDTO questionOutputDTO=new QuestionOutputDTO(question.getQuestionId(),question.getName()
-            ,question.getOptions(),question.getCorrectAnswer(),null,question.getPoints());
-            questionOutputDTOList.add(questionOutputDTO);
+    @RequestMapping(method = RequestMethod.GET, value = "/api"+"/quiz-questions"+"/{quizId}")
+    public ResponseEntity<?> getAllQuestionsByQuiz(@Valid @NotNull @PathVariable Long quizId){
+        if(quizId==null){
+            FailureResponseDTO failureResponseDTO= new FailureResponseDTO();
+            failureResponseDTO.setStatus("failure");
+            failureResponseDTO.setReason("Question id is null");
+            return new ResponseEntity<>(failureResponseDTO, HttpStatus.NOT_FOUND);
+
         }
-        return new ResponseEntity<>(questionOutputDTOList, HttpStatus.OK);
+        try{
+
+            Long.parseLong(String.valueOf(quizId));
+        }
+        catch (Exception e){
+            FailureResponseDTO failureResponseDTO = new FailureResponseDTO();
+            failureResponseDTO.setStatus("failure");
+            failureResponseDTO.setReason(e.getCause().getLocalizedMessage());
+        }
+        Quiz quiz = quizService.getAllQuestionsByQuiz(quizId);
+
+        if(quiz==null){
+            QuizOutputDTO quizOutputDTO = new QuizOutputDTO();
+            return new ResponseEntity<>(quizOutputDTO, HttpStatus.NOT_FOUND);
+
+        }
+        QuizOutputDTO quizOutputDTO = new QuizOutputDTO(quiz.getQuizId(),quiz.getName(),
+                quiz.getDescription(),quiz.getQuestions());
+
+        return new ResponseEntity<>(quizOutputDTO, HttpStatus.OK);
+
+
     }
 }
