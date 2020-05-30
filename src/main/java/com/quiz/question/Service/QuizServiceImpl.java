@@ -26,17 +26,8 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public QuizOutputDTO createQuiz(QuizInputDTO quizInputDTO) {
-        Quiz quiz = null;
-        Optional<Quiz> quizOptional = quizRepository.findByName(quizInputDTO.getName());
-
-        if (!quizOptional.isPresent()) {
-            quiz = new Quiz(quizInputDTO.getName(), quizInputDTO.getDescription());
-        } else {
-            throw new BadRequestException("already present");
-
-        }
+        Quiz quiz = new Quiz(quizInputDTO.getName(),quizInputDTO.getDescription());
         quizRepository.save(quiz);
-        //  quiz = quizRepository.findByName(quizInputDTO.getName()).get();
         QuizOutputDTO quizOutputDTO = new QuizOutputDTO(quiz.getQuizId(), quiz.getName(), quiz.getDescription(), quiz.getQuestions());
         return quizOutputDTO;
     }
