@@ -59,6 +59,9 @@ public class QuestionServiceImpl implements QuestionService {
     public Question getQuestionById(Long questionId) {
 
         Question question = questionRepository.findByQuestionId(questionId);
+        if (question == null) {
+            throw new NotFoundException("not found");
+        }
         return question;
     }
 

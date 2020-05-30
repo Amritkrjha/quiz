@@ -28,6 +28,7 @@ public class QuizServiceImpl implements QuizService {
     public QuizOutputDTO createQuiz(QuizInputDTO quizInputDTO) {
         Quiz quiz = new Quiz(quizInputDTO.getName(),quizInputDTO.getDescription());
         quizRepository.save(quiz);
+        //  quiz = quizRepository.findByName(quizInputDTO.getName()).get();
         QuizOutputDTO quizOutputDTO = new QuizOutputDTO(quiz.getQuizId(), quiz.getName(), quiz.getDescription(), quiz.getQuestions());
         return quizOutputDTO;
     }
@@ -45,6 +46,9 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public Quiz getAllQuestionsByQuiz(Long quizId) {
         Quiz quiz = quizRepository.findByQuizId(quizId);
+        if (quiz == null) {
+            throw new NotFoundException("not found");
+        }
         return quiz;
     }
 }
